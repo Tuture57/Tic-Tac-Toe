@@ -1,4 +1,4 @@
-03/03/2022
+## 03/03/2022
 
 idee pyyyyyyython :
 
@@ -12,3 +12,8 @@ pygame tuto : https://www.techwithtim.net/tutorials/python-online-game-tutorial/
 
 Github pour mettre le projet
 
+
+## 05/05/22
+
+recherche des besoins pour construire le projet 
+début de la documentation pour la librairie pygame et pour comprendre comment faire circuler les données par un réseau
