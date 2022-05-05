@@ -1,4 +1,5 @@
-Libraires pygame
+## Libraires : 
+- pygame
 
 ## Menu principal au début :
 - Titre du jeu
