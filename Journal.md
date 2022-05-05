@@ -16,4 +16,5 @@ Github pour mettre le projet
 ## 05/05/22
 
 recherche des besoins pour construire le projet 
-début de la documentation pour la librairie pygame et pour comprendre comment faire circuler les données par un réseau
+début de la documentation pour la librairie pygame pour faire une interface graphique et pour comprendre comment faire circuler les données par un réseau
+Utiliser socket : https://www.geeksforgeeks.org/socket-programming-python/
