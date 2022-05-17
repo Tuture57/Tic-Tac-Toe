@@ -9,7 +9,7 @@ C'est le projet de **NSIIIIIIII**
 ## Trucs a réaliser (hésitez pas a mettre des choses)
 - [x] Trouver le sujet du projet
 - [x] Remplir [le cahier des charges](Cahier-des-charges.md) du projet
-- [ ] S'organiser avant de commencer un truc (répartir les tâches et tt)
-- [ ] Faire le back office du jeu (jouer sur le même écran)
+- [x] S'organiser avant de commencer un truc (répartir les tâches et tt)
+- [x] Faire le back office du jeu (jouer sur le même écran)
 - [ ] Faire l'interface utilisateur du jeu
 - [ ] Faire la mise en réseau du jeu
