@@ -9,7 +9,7 @@ host, port = ('127.0.0.1', 8432)
 socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 socket.bind((host, port))
 socket.listen(5)
-print("le serveur est démaré")
+print("le serveur est démarré")
 client, adress = socket.accept()
 print("Le client d'ip", adress,"s'est connecté")
 
@@ -19,25 +19,29 @@ def button(master):
     leBouton = Button(master,bg="white",width=3,text="   ",font=('arial',60,'bold'),bd=1)
     return leBouton
 
-def playerPlaying():
-    global a
-    if a == "X":
-        a = "O"
-    elif a == "O":
-        a = "X"
-
 def gameReset():
-    global temp, boutonmask, a, advteam
+    global temp, boutonmask, a, advteam, tours
+    #réinitialise des variables
+    tours = 0
     temp = []
     boutonmask = []
+    #échange les croix et les ronds avec l'adversaire
+    if a == "X":
+        a = "O"
+        advteam = "X"
+    elif a == "O":
+        a = "X"
+        advteam = "O"
+    #réinitialise le plateau de jeu
     for i in range(3):
         for j in range(3):
             grid[i][j]["text"] = ""
             grid[i][j]["state"] = NORMAL
+    #Permet a celui qui a les croix de commencer et bloque celui qui a les ronds de commencer
     if a == "X":
         label.config(text = "C'est a ton tour "+ a)
         click_enable()
-    elif advteam == "X":
+    elif a == "O":
         label.config(text = "C'est au tour de l'adversaire "+ advteam)
         click_disable()
 
@@ -53,12 +57,13 @@ def click_enable():
         for j in range(3):
             grid[i][j]["state"] = NORMAL
     for i in boutonmask:
-        row = i[0]
-        col = i[1]
-        grid[row][col]["state"] = DISABLED
+        if len(boutonmask)!=0:
+            row = i[0]
+            col = i[1]
+            grid[row][col]["state"] = DISABLED
 
 def checkWin():
-    global a, tours
+    global a, tours, advteam
     for i in range(3):
         if grid[i][0]["text"] == grid[i][1]["text"] == grid[i][2]["text"] == a or grid[0][i]["text"] == grid[1][i]["text"] == grid[2][i]["text"] == a:
             messagebox.showinfo("Victoire", "tu as gagné")
@@ -95,10 +100,9 @@ def buttonClick(row,col):
     client.send(data.encode())
     temp = [row,col]
     boutonmask.append(temp)
-    print(boutonmask)
     click_disable()
-    checkWin()
     label.config(text = "C'est au tour de l'adversaire "+ advteam)
+    checkWin()
 
 def buttonClick2(row,col):
     global a, advteam, boutonmask, temp, tours
@@ -106,10 +110,9 @@ def buttonClick2(row,col):
     grid[row][col].config(text=advteam, state=DISABLED, disabledforeground=color[advteam])
     temp = [row,col]
     boutonmask.append(temp)
-    print(boutonmask)
     click_enable()
-    checkWin2()
     label.config(text = "C'est a ton tour "+ a)
+    checkWin2()
 
 def message_receive():
     while True:
@@ -154,10 +157,9 @@ for i in range(3):
 
 #Label def
 
-label = Label(text = "C'est a ton tour", font=("arial",20,"bold"))
+label = Label(text = "", font=("arial",20,"bold"))
 label.grid(row=3, column=0, columnspan=3)
 
 threading._start_new_thread(message_receive, ())
-
 gameReset()
 root.mainloop()

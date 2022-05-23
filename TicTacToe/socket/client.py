@@ -17,15 +17,17 @@ def button(master):
     leBouton = Button(master,bg="white",width=3,text="   ",font=('arial',60,'bold'),bd=1)
     return leBouton
 
-def playerPlaying():
-    global a
-    if a == "X": a = "O"
-    elif a == "O": a = "X"
-
 def gameReset():
-    global temp, boutonmask, a, advteam
+    global temp, boutonmask, a, advteam, tours
+    tours = 0
     temp = []
     boutonmask = []
+    if a == "X":
+        a = "O"
+        advteam = "X"
+    elif a == "O":
+        a = "X"
+        advteam = "O"
     for i in range(3):
         for j in range(3):
             grid[i][j]["text"] = ""
@@ -33,9 +35,10 @@ def gameReset():
     if a == "X":
         label.config(text = "C'est a ton tour "+ a)
         click_enable()
-    elif advteam == "X":
+    elif a =="O":
         label.config(text = "C'est au tour de l'adversaire "+ advteam)
         click_disable()
+
 
 def click_disable():
     for i in range(3):
@@ -48,13 +51,14 @@ def click_enable():
         for j in range(3):
             grid[i][j]["state"] = NORMAL
     for i in boutonmask:
-        row = i[0]
-        col = i[1]
-        grid[row][col]["state"] = DISABLED
+        if len(boutonmask)!=0:
+            row = i[0]
+            col = i[1]
+            grid[row][col]["state"] = DISABLED
 
 
 def checkWin():
-    global a
+    global a, advteam, tours
     for i in range(3):
         if grid[i][0]["text"] == grid[i][1]["text"] == grid[i][2]["text"] == a or grid[0][i]["text"] == grid[1][i]["text"] == grid[2][i]["text"] == a:
             messagebox.showinfo("Victoire", "tu as gagné")
@@ -69,7 +73,7 @@ def checkWin():
             gameReset()
 
 def checkWin2():
-    global a, advteam
+    global a, advteam, tours
     for i in range(3):
         if grid[i][0]["text"] == grid[i][1]["text"] == grid[i][2]["text"] == advteam or grid[0][i]["text"] == grid[1][i]["text"] == grid[2][i]["text"] == advteam:
             messagebox.showinfo("Perdu", "tu as perdu")
@@ -91,10 +95,9 @@ def buttonClick(row,col):
     client.send(data.encode())
     temp = [row,col]
     boutonmask.append(temp)
-    print(boutonmask)
     click_disable()
-    checkWin()
     label.config(text = "C'est au tour de l'adversaire "+ advteam)
+    checkWin()
 
 
 def buttonClick2(row,col):
@@ -103,10 +106,10 @@ def buttonClick2(row,col):
     grid[row][col].config(text=advteam, state=DISABLED, disabledforeground=color[advteam])
     temp = [row,col]
     boutonmask.append(temp)
-    print(boutonmask)
     click_enable()
-    checkWin2()
     label.config(text = "C'est a ton tour "+ a)
+    checkWin2()
+
 
 def message_receive():
     while True:
@@ -128,6 +131,7 @@ root.resizable(height=False, width=False)
 root.configure(bg="white")
 msg=client.recv(4096)
 a = msg.decode()
+print(a)
 if a == "O":
     advteam = "X"
 elif a == 'X':
@@ -149,7 +153,7 @@ for i in range(3):
 
 #Label def
 
-label = Label(text = "C'est au tour de l'adversaire", font=("arial",20,"bold"))
+label = Label(text = "", font=("arial",20,"bold"))
 label.grid(row=3, column=0, columnspan=3)
 
 threading._start_new_thread(message_receive, ())
