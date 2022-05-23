@@ -12,4 +12,4 @@ C'est le projet de **NSIIIIIIII**
 - [x] S'organiser avant de commencer un truc (répartir les tâches et tt)
 - [x] Faire le back office du jeu (jouer sur le même écran)
 - [ ] Faire l'interface utilisateur du jeu
-- [ ] Faire la mise en réseau du jeu
+- [x] Faire la mise en réseau du jeu
