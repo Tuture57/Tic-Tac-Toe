@@ -11,5 +11,7 @@ C'est le projet de **NSIIIIIIII**
 - [x] Remplir [le cahier des charges](Cahier-des-charges.md) du projet
 - [x] S'organiser avant de commencer un truc (répartir les tâches et tt)
 - [x] Faire le back office du jeu (jouer sur le même écran)
-- [ ] Faire l'interface utilisateur du jeu
+- [X] Faire l'interface utilisateur du jeu
 - [x] Faire la mise en réseau du jeu
+- [ ] Améliorer l'interface graphique
+- [ ] Rajouter L'IA
