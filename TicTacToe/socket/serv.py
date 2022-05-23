@@ -5,11 +5,13 @@ import socket
 import threading
 
 ######################################
-HOST_ADDR = "127.0.0.1"
-HOST_PORT = 8432
-
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect((HOST_ADDR, HOST_PORT))
+host, port = ('127.0.0.1', 8432)
+socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+socket.bind((host, port))
+socket.listen(5)
+print("le serveur est démaré")
+client, adress = socket.accept()
+print("Le client d'ip", adress,"s'est connecté")
 
 ######################################
 
@@ -19,8 +21,10 @@ def button(master):
 
 def playerPlaying():
     global a
-    if a == "X": a = "O"
-    elif a == "O": a = "X"
+    if a == "X":
+        a = "O"
+    elif a == "O":
+        a = "X"
 
 def gameReset():
     global temp, boutonmask, a, advteam
@@ -37,6 +41,7 @@ def gameReset():
         label.config(text = "C'est au tour de l'adversaire "+ advteam)
         click_disable()
 
+
 def click_disable():
     for i in range(3):
         for j in range(3):
@@ -52,9 +57,8 @@ def click_enable():
         col = i[1]
         grid[row][col]["state"] = DISABLED
 
-
 def checkWin():
-    global a
+    global a, tours
     for i in range(3):
         if grid[i][0]["text"] == grid[i][1]["text"] == grid[i][2]["text"] == a or grid[0][i]["text"] == grid[1][i]["text"] == grid[2][i]["text"] == a:
             messagebox.showinfo("Victoire", "tu as gagné")
@@ -69,7 +73,7 @@ def checkWin():
             gameReset()
 
 def checkWin2():
-    global a, advteam
+    global a, advteam, tours
     for i in range(3):
         if grid[i][0]["text"] == grid[i][1]["text"] == grid[i][2]["text"] == advteam or grid[0][i]["text"] == grid[1][i]["text"] == grid[2][i]["text"] == advteam:
             messagebox.showinfo("Perdu", "tu as perdu")
@@ -96,7 +100,6 @@ def buttonClick(row,col):
     checkWin()
     label.config(text = "C'est au tour de l'adversaire "+ advteam)
 
-
 def buttonClick2(row,col):
     global a, advteam, boutonmask, temp, tours
     tours = tours + 1
@@ -122,20 +125,22 @@ def message_receive():
 #Main variables
 
 root = Tk()
-root.title("client")
+root.title("server")
 root.geometry("460x530")
 root.resizable(height=False, width=False)
 root.configure(bg="white")
-msg=client.recv(4096)
-a = msg.decode()
+a = r.choice(["O","X"])
 if a == "O":
+    client.send("X".encode())
     advteam = "X"
 elif a == 'X':
+    client.send("O".encode())
     advteam = "O"
 color = {"O": "red", "X": "blue"}
 boutonmask = []
 temp = []
 tours = 0
+
 
 #Grid def
 
@@ -149,9 +154,10 @@ for i in range(3):
 
 #Label def
 
-label = Label(text = "C'est au tour de l'adversaire", font=("arial",20,"bold"))
+label = Label(text = "C'est a ton tour", font=("arial",20,"bold"))
 label.grid(row=3, column=0, columnspan=3)
 
 threading._start_new_thread(message_receive, ())
+
 gameReset()
 root.mainloop()
